@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Invitation</title>
+
+  <!-- Polices (fonctionne si la personne a internet) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink: #000000;      /* texte des sections demandé */
+      --accent: #FF5C00;   /* orange demandé */
+      --paper: #FEFEFE;    /* fond lettre demandé */
+      --shadow: rgba(0,0,0,.28);
+      --seal: #8e1f2a;
+      --seal2:#b02a38;
+      --envelope:#f2e7da;
+      --envelope2:#e7d6c4;
+      --edge:#d9c6b2;
+    }
+
+    *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+    /* === SCÈNE CIEL === */
+    .scene{
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(1200px 600px at 30% 20%, rgba(255,255,255,.9), rgba(255,255,255,0) 60%),
+        radial-gradient(1000px 500px at 70% 35%, rgba(255,255,255,.75), rgba(255,255,255,0) 62%),
+        linear-gradient(#8ec5ff 0%, #cfe9ff 55%, #eaf6ff 100%);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    /* nuages animés */
+    .clouds, .clouds:before, .clouds:after{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background:
+        radial-gradient(110px 55px at 20% 25%, rgba(255,255,255,.65), rgba(255,255,255,0) 70%),
+        radial-gradient(140px 70px at 38% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 72%),
+        radial-gradient(160px 80px at 65% 35%, rgba(255,255,255,.5), rgba(255,255,255,0) 72%),
+        radial-gradient(120px 60px at 80% 28%, rgba(255,255,255,.55), rgba(255,255,255,0) 72%);
+      filter: blur(1px);
+      opacity:.9;
+      animation: drift 18s linear infinite;
+      pointer-events:none;
+    }
+    .clouds:before{ opacity:.65; animation-duration: 26s; transform: translateX(-8%); }
+    .clouds:after{ opacity:.5;  animation-duration: 34s; transform: translateX(10%); }
+    @keyframes drift{
+      0%{ transform: translateX(-6%) translateY(0); }
+      50%{ transform: translateX(6%) translateY(-2%); }
+      100%{ transform: translateX(-6%) translateY(0); }
+    }
+
+    /* texte discret en haut */
+    .hint{
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: .2px;
+      color: rgba(255,255,255,.85);
+      text-shadow: 0 1px 10px rgba(0,0,0,.25);
+      user-select: none;
+      padding: 0 14px;
+    }
+
+    /* === ENVELOPPE === */
+    .stage{
+      width: min(360px, 92vw);
+      height: 280px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      perspective: 900px;
+    }
+
+    .envelope-wrap{
+      width: min(340px, 90vw);
+      height: 220px;
+      position: relative;
+      transform: translateZ(0);
+      filter: drop-shadow(0 22px 28px rgba(0,0,0,.18));
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .envelope{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      border-radius: 14px;
+      background: linear-gradient(180deg, var(--envelope) 0%, var(--envelope2) 100%);
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.08);
+    }
+
+    /* rabat arrière (structure) */
+    .envelope:before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 35%),
+        linear-gradient(225deg, rgba(0,0,0,.06) 0%, rgba(0,0,0,0) 40%);
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    /* rabat haut (animé) */
+    .flap{
+      position:absolute;
+      left: 0; right: 0;
+      top: 0;
+      height: 60%;
+      transform-origin: top center;
+      transform: rotateX(0deg);
+      transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+      z-index: 4;
+    }
+    .flap:before{
+      content:"";
+      position:absolute;
+      left: 0; right: 0; top: 0;
+      margin: auto;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #f7efe6 0%, #e8d7c4 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .flap:after{
+      content:"";
+      position:absolute;
+      inset: -6px -6px auto -6px;
+      height: 100%;
+      background: radial-gradient(80% 70% at 50% 40%, rgba(0,0,0,.10), rgba(0,0,0,0) 60%);
+      opacity:.35;
+      pointer-events:none;
+    }
+
+    /* rabats latéraux */
+    .side{
+      position:absolute;
+      inset: 0;
+      z-index: 2;
+    }
+    .side:before,
+    .side:after{
+      content:"";
+      position:absolute;
+      top: 36%;
+      width: 60%;
+      height: 70%;
+      background: linear-gradient(180deg, #f2e7da 0%, #e5d2be 100%);
+      border-top: 1px solid rgba(0,0,0,.06);
+      opacity:.98;
+    }
+    .side:before{
+      left: -5%;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      box-shadow: inset -10px 0 14px rgba(0,0,0,.05);
+    }
+    .side:after{
+      right: -5%;
+      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+      box-shadow: inset 10px 0 14px rgba(0,0,0,.05);
+    }
+
+    /* rabat bas (devant) */
+    .bottom{
+      position:absolute;
+      left: 0; right: 0;
+      bottom: 0;
+      height: 62%;
+      z-index: 3;
+    }
+    .bottom:before{
+      content:"";
+      position:absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 100%;
+      background: linear-gradient(180deg, #f5ecdf 0%, #ead8c4 100%);
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+      border-top: 1px solid rgba(0,0,0,.08);
+    }
+
+    /* sceau de cire */
+    .seal{
+      position:absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%,-50%);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--seal2), var(--seal));
+      box-shadow:
+        inset 0 6px 12px rgba(255,255,255,.18),
+        inset 0 -10px 18px rgba(0,0,0,.25),
+        0 14px 20px rgba(0,0,0,.18);
+      z-index: 6;
+      transition: opacity 450ms ease, transform 650ms cubic-bezier(.2,.9,.2,1);
+    }
+    .seal:before{
+      content:"";
+      position:absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.12), rgba(0,0,0,.18));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+    }
+    .seal .lettermark{
+      position:absolute;
+      inset: 0;
+      display:grid;
+      place-items:center;
+      font-family: "Great Vibes", cursive;
+      font-size: 40px;
+      color: rgba(255,255,255,.75);
+      text-shadow: 0 1px 0 rgba(0,0,0,.25);
+      transform: translateY(-2px);
+      mix-blend-mode: screen;
+    }
+    /* gravure (effet creusé) */
+    .seal .engrave{
+      position:absolute;
+      inset: 0;
+      display:grid;
+      place-items:center;
+      font-family: "Great Vibes", cursive;
+      font-size: 40px;
+      color: rgba(0,0,0,.25);
+      text-shadow:
+        0 2px 0 rgba(255,255,255,.10),
+        0 -1px 0 rgba(0,0,0,.25);
+      transform: translateY(-1px);
+      mix-blend-mode: multiply;
+      opacity:.75;
+    }
+
+    /* === LETTRE (dans l’enveloppe) === */
+    .letter{
+      position:absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(70px) scaleY(.30);
+      width: 88%;
+      height: 86%;
+      background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+      border-radius: 10px;
+      box-shadow:
+        0 14px 22px rgba(0,0,0,.15),
+        inset 0 0 0 1px rgba(0,0,0,.06);
+      z-index: 1;
+      opacity: 0;
+      transition:
+        opacity 350ms ease,
+        transform 1200ms cubic-bezier(.18,.95,.18,1);
+      overflow: hidden;
+    }
+
+    /* pli (unfold) */
+    .fold{
+      position:absolute;
+      left: 0; right: 0; top: 54%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.12), rgba(0,0,0,0));
+      opacity: .65;
+    }
+
+    /* mini contenu (juste décor pendant sortie) */
+    .letter-mini{
+      padding: 14px 16px;
+      color: rgba(0,0,0,.35);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .letter-mini .line{
+      height: 8px;
+      margin: 8px 0;
+      background: linear-gradient(90deg, rgba(0,0,0,.07), rgba(0,0,0,0));
+      border-radius: 999px;
+    }
+    .letter-mini .line:nth-child(2){ width: 78%; }
+    .letter-mini .line:nth-child(3){ width: 64%; }
+    .letter-mini .line:nth-child(4){ width: 86%; }
+
+    /* État ouvert (animation) */
+    .opened .flap{
+      transform: rotateX(-155deg);
+    }
+    .opened .seal{
+      opacity: 0;
+      transform: translate(-50%,-60%) scale(.92);
+    }
+    .opened .letter{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-20px) scaleY(1);
+    }
+
+    /* === PLEIN ÉCRAN (PAGE LETTRE) === */
+    .page{
+      position: fixed;
+      inset: 0;
+      background: var(--paper);
+      color: var(--ink);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(14px);
+      transition: opacity 700ms ease, transform 700ms ease;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        18px
+        max(22px, env(safe-area-inset-bottom))
+        18px;
+    }
+    .page.show{
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .paper{
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 18px 8px 28px;
+    }
+
+    .main-title{
+      font-family: "Great Vibes", cursive;
+      color: var(--accent);
+      font-size: clamp(44px, 7vw, 64px);
+      line-height: 1;
+      margin: 6px 0 18px;
+      text-align: center;
+      font-weight: 400;
+      letter-spacing: .2px;
+    }
+
+    .section{
+      margin: 18px 0 22px;
+      padding: 14px 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.03);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+    }
+
+    .section-title{
+      font-family: "Great Vibes", cursive;
+      color: var(--ink);
+      font-size: 38px;
+      line-height: 1.05;
+      margin: 2px 0 10px;
+      font-weight: 400;
+    }
+
+    .section-text{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.4;
+      margin: 0;
+      white-space: pre-line;
+      color: var(--ink);
+    }
+
+    .divider{
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.08), rgba(0,0,0,0));
+      margin: 22px 0;
+    }
+
+    /* petit “tap” indicateur discret */
+    .tap{
+      position: absolute;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: .3px;
+      color: rgba(255,255,255,.8);
+      text-shadow: 0 2px 10px rgba(0,0,0,.25);
+      user-select: none;
+      opacity: .95;
+    }
+
+    /* Accessibilité : réduire animations si demandé */
+    @media (prefers-reduced-motion: reduce){
+      .clouds, .clouds:before, .clouds:after{ animation: none; }
+      .flap, .seal, .letter, .page{ transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scene" id="scene">
+    <div class="clouds" aria-hidden="true"></div>
+
+    <div class="hint">Azy ouvre l’enveloppe nainguy</div>
+
+    <div class="stage">
+      <div class="envelope-wrap" id="envelopeWrap" role="button" aria-label="Ouvrir l'enveloppe">
+        <div class="envelope" id="envelope">
+          <div class="letter" id="letter">
+            <div class="letter-mini" aria-hidden="true">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div class="fold" aria-hidden="true"></div>
+          </div>
+
+          <div class="side" aria-hidden="true"></div>
+          <div class="bottom" aria-hidden="true"></div>
+
+          <div class="flap" aria-hidden="true"></div>
+
+          <div class="seal" id="seal" aria-hidden="true">
+            <div class="lettermark">L</div>
+            <div class="engrave">L</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tap">Touchez l’enveloppe</div>
+  </div>
+
+  <!-- PAGE LETTRE (plein écran) -->
+  <main class="page" id="page" aria-hidden="true">
+    <div class="paper">
+      <h1 class="main-title">Samedi 31 Janvier</h1>
+
+      <section class="section">
+        <h2 class="section-title">Exposition des Flops</h2>
+        <p class="section-text">14h | Musée des Arts &amp; Métiers
+Heure de fin  estimée : 15h30</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Maaatch</h2>
+        <p class="section-text">17h | Paris FC (Lú) vs Olympique de Marseille (Logan)</p>
+      </section>
+
+      <div class="divider"></div>
+
+      <h1 class="main-title">Optionnel (Invitation)</h1>
+
+      <section class="section">
+        <h2 class="section-title">Le poulet qui chiale ses grands morts</h2>
+        <p class="section-text">12h | Dégustation d’un met divin avant départ à 13h pour le musestre</p>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const wrap = document.getElementById('envelopeWrap');
+      const envelope = document.getElementById('envelope');
+      const page = document.getElementById('page');
+
+      let opened = false;
+
+      function openEnvelope(){
+        if (opened) return;
+        opened = true;
+
+        envelope.classList.add('opened');
+
+        // Timing calé sur les transitions CSS (flap/letter)
+        // 1) On laisse l'enveloppe s'ouvrir + la lettre sortir
+        // 2) On bascule vers la page plein écran
+        window.setTimeout(() => {
+          page.classList.add('show');
+          page.setAttribute('aria-hidden', 'false');
+        }, 1350);
+      }
+
+      // iPhone: tap/click
+      wrap.addEventListener('click', openEnvelope, { passive: true });
+      wrap.addEventListener('touchend', openEnvelope, { passive: true });
+
+      // Bonus: ouvrir aussi si on tape n’importe où sur la scène
+      document.getElementById('scene').addEventListener('click', (e) => {
+        // évite double déclenchement
+        if (e.target.closest('#page')) return;
+        openEnvelope();
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
