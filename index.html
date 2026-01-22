@@ -482,40 +482,42 @@ Heure de fin  estimée : 15h30</p>
     </div>
   </main>
 
-  <script>
-    (function(){
-      const wrap = document.getElementById('envelopeWrap');
-      const envelope = document.getElementById('envelope');
-      const page = document.getElementById('page');
+<script>
+  (function(){
+    const wrap = document.getElementById('envelopeWrap');
+    const envelope = document.getElementById('envelope');
+    const page = document.getElementById('page');
+    const bgm = document.getElementById('bgm');
 
-      let opened = false;
+    let opened = false;
 
-      function openEnvelope(){
-        if (opened) return;
-        opened = true;
+    function openEnvelope(){
+      if (opened) return;
+      opened = true;
 
-        envelope.classList.add('opened');
-
-        // Timing calé sur les transitions CSS (flap/letter)
-        // 1) On laisse l'enveloppe s'ouvrir + la lettre sortir
-        // 2) On bascule vers la page plein écran
-        window.setTimeout(() => {
-          page.classList.add('show');
-          page.setAttribute('aria-hidden', 'false');
-        }, 1350);
+      // ✅ Start audio on user gesture (iPhone-friendly)
+      if (bgm) {
+        bgm.currentTime = 0;
+        bgm.play().catch(() => {});
       }
 
-      // iPhone: tap/click
-      wrap.addEventListener('click', openEnvelope, { passive: true });
-      wrap.addEventListener('touchend', openEnvelope, { passive: true });
+      envelope.classList.add('opened');
 
-      // Bonus: ouvrir aussi si on tape n’importe où sur la scène
-      document.getElementById('scene').addEventListener('click', (e) => {
-        // évite double déclenchement
-        if (e.target.closest('#page')) return;
-        openEnvelope();
-      }, { passive: true });
-    })();
-  </script>
+      window.setTimeout(() => {
+        page.classList.add('show');
+        page.setAttribute('aria-hidden', 'false');
+      }, 1350);
+    }
+
+    wrap.addEventListener('click', openEnvelope, { passive: true });
+    wrap.addEventListener('touchend', openEnvelope, { passive: true });
+
+    document.getElementById('scene').addEventListener('click', (e) => {
+      if (e.target.closest('#page')) return;
+      openEnvelope();
+    }, { passive: true });
+  })();
+</script>
+
 </body>
 </html>
