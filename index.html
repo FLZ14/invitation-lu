@@ -12,15 +12,9 @@
 
   <style>
     :root{
-      --ink: #000000;      /* texte des sections demandé */
-      --accent: #FF5C00;   /* orange demandé */
-      --paper: #FEFEFE;    /* fond lettre demandé */
-      --shadow: rgba(0,0,0,.28);
-      --seal: #8e1f2a;
-      --seal2:#b02a38;
-      --envelope:#f2e7da;
-      --envelope2:#e7d6c4;
-      --edge:#d9c6b2;
+      --ink: #000000;
+      --accent: #FF5C00;
+      --paper: #FEFEFE;
     }
 
     *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -92,7 +86,7 @@
       height: 220px;
       position: relative;
       transform: translateZ(0);
-      filter: drop-shadow(0 22px 28px rgba(0,0,0,.18));
+      filter: drop-shadow(0 18px 32px rgba(0,0,0,.25));
       cursor: pointer;
       user-select: none;
       touch-action: manipulation;
@@ -102,25 +96,23 @@
       width: 100%;
       height: 100%;
       position: relative;
-      border-radius: 14px;
-      background: linear-gradient(180deg, var(--envelope) 0%, var(--envelope2) 100%);
+      background:
+        linear-gradient(135deg, transparent 0%, rgba(0,0,0,.02) 100%),
+        linear-gradient(180deg, #e8dcc8 0%, #dbc9af 100%);
       overflow: hidden;
-      border: 1px solid rgba(0,0,0,.08);
     }
 
-    /* rabat arrière (structure) */
-    .envelope:before{
+    .envelope:after{
       content:"";
       position:absolute;
       inset: 0;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 35%),
-        linear-gradient(225deg, rgba(0,0,0,.06) 0%, rgba(0,0,0,0) 40%);
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.015) 2px, rgba(0,0,0,.015) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.015) 2px, rgba(0,0,0,.015) 4px);
       pointer-events:none;
-      opacity:.8;
+      opacity: .6;
     }
 
-    /* rabat haut (animé) */
     .flap{
       position:absolute;
       left: 0; right: 0;
@@ -138,21 +130,26 @@
       margin: auto;
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, #f7efe6 0%, #e8d7c4 100%);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.03) 0%, transparent 15%),
+        linear-gradient(180deg, #f0e5d3 0%, #e0d0b8 100%);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
-      border-bottom: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 2px 0 rgba(0,0,0,.08);
     }
     .flap:after{
       content:"";
       position:absolute;
-      inset: -6px -6px auto -6px;
+      left: 0; right: 0; top: 0;
+      width: 100%;
       height: 100%;
-      background: radial-gradient(80% 70% at 50% 40%, rgba(0,0,0,.10), rgba(0,0,0,0) 60%);
-      opacity:.35;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
       pointer-events:none;
+      opacity: .5;
     }
 
-    /* rabats latéraux */
     .side{
       position:absolute;
       inset: 0;
@@ -165,22 +162,24 @@
       top: 36%;
       width: 60%;
       height: 70%;
-      background: linear-gradient(180deg, #f2e7da 0%, #e5d2be 100%);
-      border-top: 1px solid rgba(0,0,0,.06);
+      background: linear-gradient(180deg, #ded1bb 0%, #cebca3 100%);
       opacity:.98;
     }
     .side:before{
       left: -5%;
       clip-path: polygon(0 0, 100% 50%, 0 100%);
-      box-shadow: inset -10px 0 14px rgba(0,0,0,.05);
+      box-shadow:
+        inset -8px 0 16px rgba(0,0,0,.12),
+        inset 0 8px 8px rgba(0,0,0,.06);
     }
     .side:after{
       right: -5%;
       clip-path: polygon(100% 0, 0 50%, 100% 100%);
-      box-shadow: inset 10px 0 14px rgba(0,0,0,.05);
+      box-shadow:
+        inset 8px 0 16px rgba(0,0,0,.12),
+        inset 0 8px 8px rgba(0,0,0,.06);
     }
 
-    /* rabat bas (devant) */
     .bottom{
       position:absolute;
       left: 0; right: 0;
@@ -193,35 +192,50 @@
       position:absolute;
       left: 0; right: 0; bottom: 0;
       height: 100%;
-      background: linear-gradient(180deg, #f5ecdf 0%, #ead8c4 100%);
+      background:
+        linear-gradient(0deg, rgba(0,0,0,.04) 0%, transparent 25%),
+        linear-gradient(180deg, #e8dcc8 0%, #d5c4ab 100%);
       clip-path: polygon(0 100%, 50% 0, 100% 100%);
-      border-top: 1px solid rgba(0,0,0,.08);
+      box-shadow:
+        inset 0 -8px 16px rgba(0,0,0,.08),
+        0 -2px 0 rgba(0,0,0,.06);
     }
 
-    /* sceau de cire */
     .seal{
       position:absolute;
       left: 50%;
       top: 52%;
       transform: translate(-50%,-50%);
-      width: 70px;
-      height: 70px;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, var(--seal2), var(--seal));
+      background:
+        radial-gradient(circle at 28% 25%, #c94a4a 0%, #a82e2e 35%, #7a1515 100%);
       box-shadow:
-        inset 0 6px 12px rgba(255,255,255,.18),
-        inset 0 -10px 18px rgba(0,0,0,.25),
-        0 14px 20px rgba(0,0,0,.18);
+        inset 0 -3px 8px rgba(0,0,0,.4),
+        inset 0 3px 6px rgba(255,255,255,.15),
+        0 8px 16px rgba(0,0,0,.3),
+        0 3px 6px rgba(0,0,0,.2);
       z-index: 6;
       transition: opacity 450ms ease, transform 650ms cubic-bezier(.2,.9,.2,1);
     }
     .seal:before{
       content:"";
       position:absolute;
-      inset: 10px;
+      inset: 0;
       border-radius: 50%;
-      background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.12), rgba(0,0,0,.18));
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+      background:
+        radial-gradient(circle at 35% 30%, transparent 20%, rgba(0,0,0,.15) 60%, transparent 80%),
+        radial-gradient(circle at 70% 60%, transparent 25%, rgba(255,255,255,.08) 50%, transparent 70%),
+        radial-gradient(circle at 45% 75%, transparent 30%, rgba(0,0,0,.12) 55%, transparent 75%);
+    }
+    .seal:after{
+      content:"";
+      position:absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 85%, rgba(139,35,35,.6) 88%, transparent 92%);
     }
     .seal .lettermark{
       position:absolute;
@@ -229,27 +243,26 @@
       display:grid;
       place-items:center;
       font-family: "Great Vibes", cursive;
-      font-size: 40px;
-      color: rgba(255,255,255,.75);
-      text-shadow: 0 1px 0 rgba(0,0,0,.25);
-      transform: translateY(-2px);
-      mix-blend-mode: screen;
+      font-size: 42px;
+      color: transparent;
+      background: linear-gradient(135deg, rgba(0,0,0,.4) 0%, rgba(0,0,0,.6) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 1px 0 rgba(255,255,255,.1));
+      transform: translateY(-1px);
     }
-    /* gravure (effet creusé) */
     .seal .engrave{
       position:absolute;
       inset: 0;
       display:grid;
       place-items:center;
       font-family: "Great Vibes", cursive;
-      font-size: 40px;
-      color: rgba(0,0,0,.25);
+      font-size: 42px;
+      color: rgba(0,0,0,.3);
       text-shadow:
-        0 2px 0 rgba(255,255,255,.10),
-        0 -1px 0 rgba(0,0,0,.25);
-      transform: translateY(-1px);
-      mix-blend-mode: multiply;
-      opacity:.75;
+        0 1px 0 rgba(255,255,255,.08),
+        0 -1px 1px rgba(0,0,0,.3);
+      transform: translateY(0px);
     }
 
     /* === LETTRE (dans l’enveloppe) === */
@@ -339,7 +352,7 @@
     .paper{
       max-width: 640px;
       margin: 0 auto;
-      padding: 18px 8px 28px;
+      padding: 24px 18px 32px;
     }
 
     .main-title{
@@ -347,43 +360,89 @@
       color: var(--accent);
       font-size: clamp(44px, 7vw, 64px);
       line-height: 1;
-      margin: 6px 0 18px;
+      margin: 0 0 8px;
       text-align: center;
       font-weight: 400;
       letter-spacing: .2px;
     }
 
+    .ornament{
+      text-align: center;
+      margin: 18px 0 32px;
+      position: relative;
+    }
+    .ornament:before,
+    .ornament:after{
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 32%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.15));
+    }
+    .ornament:before{
+      left: 0;
+    }
+    .ornament:after{
+      right: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,.15), rgba(0,0,0,0));
+    }
+    .ornament-icon{
+      display: inline-block;
+      color: var(--accent);
+      font-size: 18px;
+      opacity: .5;
+    }
+
     .section{
-      margin: 18px 0 22px;
-      padding: 14px 14px;
-      border-radius: 14px;
-      background: rgba(0,0,0,.03);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+      margin: 28px 0 36px;
+      padding: 0;
     }
 
     .section-title{
       font-family: "Great Vibes", cursive;
       color: var(--ink);
-      font-size: 38px;
-      line-height: 1.05;
-      margin: 2px 0 10px;
+      font-size: 40px;
+      line-height: 1;
+      margin: 0 0 12px;
       font-weight: 400;
+      text-align: center;
     }
 
     .section-text{
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-weight: 300;
       font-size: 17px;
-      line-height: 1.4;
+      line-height: 1.55;
       margin: 0;
       white-space: pre-line;
       color: var(--ink);
+      text-align: center;
     }
 
     .divider{
+      margin: 42px auto;
+      max-width: 200px;
       height: 1px;
-      background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.08), rgba(0,0,0,0));
-      margin: 22px 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0), var(--accent) 20%, var(--accent) 80%, rgba(0,0,0,0));
+      opacity: .3;
+      position: relative;
+    }
+    .divider:before,
+    .divider:after{
+      content: "◆";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 8px;
+      opacity: .6;
+    }
+    .divider:before{
+      left: -8px;
+    }
+    .divider:after{
+      right: -8px;
     }
 
     /* petit “tap” indicateur discret */
@@ -443,10 +502,10 @@
     <div class="tap">Touchez l’enveloppe</div>
   </div>
 
-  <!-- PAGE LETTRE (plein écran) -->
   <main class="page" id="page" aria-hidden="true">
     <div class="paper">
       <h1 class="main-title">Samedi 31 Janvier</h1>
+      <div class="ornament"><span class="ornament-icon">❧</span></div>
 
       <section class="section">
         <h2 class="section-title">Exposition des Flops</h2>
@@ -462,10 +521,11 @@ Heure de fin  estimée : 15h30</p>
       <div class="divider"></div>
 
       <h1 class="main-title">Optionnel (Invitation)</h1>
+      <div class="ornament"><span class="ornament-icon">❧</span></div>
 
       <section class="section">
         <h2 class="section-title">Le poulet qui chiale ses grands morts</h2>
-        <p class="section-text">12h | Dégustation d’un met divin avant départ à 13h pour le musestre</p>
+        <p class="section-text">12h | Dégustation d'un met divin avant départ à 13h pour le musestre</p>
       </section>
     </div>
   </main>
