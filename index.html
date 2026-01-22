@@ -487,41 +487,45 @@ Heure de fin  estimée : 15h30</p>
 </audio>
 
 <script>
-  (function(){
-    const wrap = document.getElementById('envelopeWrap');
-    const envelope = document.getElementById('envelope');
-    const page = document.getElementById('page');
-    const bgm = document.getElementById('bgm');
+(function(){
 
-    let opened = false;
+  const wrap = document.getElementById('envelopeWrap');
+  const envelope = document.getElementById('envelope');
+  const page = document.getElementById('page');
+  const bgm = document.getElementById('bgm');
 
-    function openEnvelope(){
-      if (opened) return;
-      opened = true;
+  let opened = false;
 
-      // ✅ Start audio on user gesture (iPhone-friendly)
-      if (bgm) {
-        bgm.currentTime = 0;
-        bgm.play().catch(() => {});
-      }
+  function openEnvelope(e){
+    if (opened) return;
+    opened = true;
 
-      envelope.classList.add('opened');
-
-      window.setTimeout(() => {
-        page.classList.add('show');
-        page.setAttribute('aria-hidden', 'false');
-      }, 1350);
+    // 🎵 LANCEMENT AUDIO — DIRECTEMENT DANS LE TAP (OBLIGATOIRE POUR SAFARI)
+    if (bgm) {
+      bgm.volume = 1.0;
+      bgm.currentTime = 0;
+      bgm.play().catch(err => {
+        console.log("Audio bloqué par Safari :", err);
+      });
     }
 
-    wrap.addEventListener('click', openEnvelope, { passive: true });
-    wrap.addEventListener('touchend', openEnvelope, { passive: true });
+    // animation enveloppe
+    envelope.classList.add('opened');
 
-    document.getElementById('scene').addEventListener('click', (e) => {
-      if (e.target.closest('#page')) return;
-      openEnvelope();
-    }, { passive: true });
-  })();
+    // ouverture page après animation
+    setTimeout(() => {
+      page.classList.add('show');
+      page.setAttribute('aria-hidden', 'false');
+    }, 1350);
+  }
+
+  // ⚠️ UN SEUL LISTENER (important pour iOS)
+  wrap.addEventListener('touchend', openEnvelope);
+  wrap.addEventListener('click', openEnvelope);
+
+})();
 </script>
+
 
 </body>
 </html>
