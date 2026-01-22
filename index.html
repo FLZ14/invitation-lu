@@ -383,6 +383,15 @@
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
     }
 
+    .img-link{
+  display: block;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.img-link:active{
+  transform: scale(0.995);
+}
+
     
     .divider{
       margin: 42px auto;
@@ -475,7 +484,11 @@
         <p class="section-text">14h | Musée des Arts &amp; Métiers
 Heure de fin  estimée : 15h30</p>
         
-<img class="section-img" src="public/maps.jpg" alt="Plan d'accès">
+<a class="img-link"
+   href="http://maps.apple.com/?saddr=1%20All%C3%A9e%20Mozart%2C%2094000%20Cr%C3%A9teil&daddr=Mus%C3%A9e%20des%20Arts%20et%20M%C3%A9tiers%2C%20Paris&dirflg=r">
+  <img class="section-img" src="public/maps.jpg" alt="Ouvrir l’itinéraire dans Plans">
+</a>
+
       </section>
 
       <section class="section">
